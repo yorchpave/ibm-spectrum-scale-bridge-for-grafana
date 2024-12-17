@@ -44,11 +44,11 @@ RUN echo "the OpentTSDB API HTTP/S port is set to $PORT"
 
 ARG PROMPORT=None
 ENV PROMETHEUS=$PROMPORT
-RUN echo "the Prometheus API HTTPS port is set to $PROMETHEUS" 
+RUN echo "the Prometheus API HTTPS port is set to $PROMETHEUS"
 
 ARG PERFMONPORT=9980
 ENV SERVERPORT=$PERFMONPORT
-RUN echo "the PERFMONPORT port is set to $SERVERPORT" 
+RUN echo "the PERFMONPORT port is set to $SERVERPORT"
 
 ARG CERTPATH='/etc/bridge_ssl/certs'
 ENV TLSKEYPATH=$CERTPATH
@@ -76,7 +76,7 @@ RUN echo "the log will use $LOGPATH"
 COPY ./requirements/requirements_ubi9.txt  /root/requirements_ubi9.txt
 # COPY ./requirements/requirements_ubi.in  /root/requirements_ubi.in
 
-RUN yum install -y python39 python3-pip
+RUN yum install -y python39 python3-pip gcc
 
 # RUN /usr/bin/python3 -m pip install pip-tools && \
 #     /usr/bin/python3 -m piptools compile /root/requirements_ubi.in  --output-file /root/requirements_ubi9.txt && \
@@ -99,13 +99,13 @@ COPY ./source/gpfsConfig/ZIMon* /opt/IBM/zimon/
 
 RUN if [ "${APIKEYVALUE:0:1}" = "/" ]; then ln -s $APIKEYVALUE /etc/perfmon-api-keys; echo "APIKEYVALUE is a PATH"; else echo "APIKEYVALUE not a PATH"; fi && \
     if [ -z "$TLSKEYPATH" ] || [ -z "$TLSCERTFILE" ] || [ -z "$TLSKEYFILE" ] && [ "$PROTOCOL" = "https" ]; then echo "TLSKEYPATH FOR SSL CONNECTION NOT SET - ERROR"; exit 1; else echo "PASS"; fi
-RUN echo "the ssl certificates path is set to $TLSKEYPATH" 
+RUN echo "the ssl certificates path is set to $TLSKEYPATH"
 
 # Switch to the working directory
 WORKDIR /opt/IBM/bridge
 RUN echo "$(pwd)"
 
-# Create a container user 
+# Create a container user
 RUN if [ "$GID" -gt "0" ]; then groupadd -g $GID $GROUP; else echo "Since root GID specified skipping groupadd"; fi && \
     useradd -rm -d /home/$UID -s /bin/bash -g $GID -u $UID $USER
 
@@ -118,7 +118,7 @@ RUN chgrp -R $GID /opt/IBM/bridge && \
     chgrp -R $GID $TLSKEYPATH && \
     chgrp -R $GID $LOGPATH
 
-# Set group permissions 
+# Set group permissions
 RUN chmod -R g=u /opt/IBM/bridge && \
     chmod -R g=u /opt/IBM/zimon && \
     chmod -R g=u /var/mmfs/gen && \
@@ -127,7 +127,7 @@ RUN chmod -R g=u /opt/IBM/bridge && \
     chmod -R g=u $TLSKEYPATH && \
     chmod -R g=u $LOGPATH
 
-# Chown all needed files 
+# Chown all needed files
 RUN chown -R $UID:$GID /opt/IBM/bridge && \
     chown -R $UID:$GID /opt/IBM/zimon && \
     chown -R $UID:$GID /var/mmfs/gen && \
