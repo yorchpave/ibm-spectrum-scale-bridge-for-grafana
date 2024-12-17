@@ -76,7 +76,7 @@ RUN echo "the log will use $LOGPATH"
 COPY ./requirements/requirements_ubi9.txt  /root/requirements_ubi9.txt
 # COPY ./requirements/requirements_ubi.in  /root/requirements_ubi.in
 
-RUN yum install -y python39 python3-pip gcc
+RUN yum install -y python39 python3-pip gcc python3-devel
 
 # RUN /usr/bin/python3 -m pip install pip-tools && \
 #     /usr/bin/python3 -m piptools compile /root/requirements_ubi.in  --output-file /root/requirements_ubi9.txt && \
