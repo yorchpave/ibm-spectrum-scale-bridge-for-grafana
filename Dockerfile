@@ -108,7 +108,7 @@ RUN if [ $(expr "$BASE" : '.*python.*') -eq 0 ]; then \
     python3 -m pip install  -r /root/requirements.in && \
     echo "Installed python packages: $(python3 -m pip list)"; fi
 
-RUN rm -rf /usr/bin/pip*
+# RUN rm -rf /usr/bin/pip*
 
 USER root
 
